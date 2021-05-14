@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drogue IoT OPC UA Agent</title>
+    <style>
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem
+        }
+
+        h3 {
+            font-size: 1.75rem
+
+        }
+
+        h4 {
+            font-size: 1.5rem
+        }
+
+        h5 {
+            font-size: 1.25rem
+        }
+
+        h6 {
+            font-size: 1rem
+        }
+
+        .lead {
+            font-weight: 300;
+            font-size: 2rem;
+        }
+
+        .banner {
+            font-size: 2.7rem;
+            margin: 0;
+            padding: 2rem 1rem;
+            background-color: #0d1c2c;
+            color: white;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        code {
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 87.5%;
+            color: #e83e8c;
+            word-break: break-word;
+        }
+
+        .left-column {
+            padding: .75rem;
+            max-width: 75%;
+            min-width: 55%;
+        }
+
+        .right-column {
+            padding: .75rem;
+            max-width: 25%;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        li {
+            margin: 0.75rem;
+        }
+
+        .right-section {
+            margin-left: 1rem;
+            padding-left: 0.5rem;
+        }
+
+        .right-section h3 {
+            padding-top: 0;
+            font-weight: 200;
+        }
+
+        .right-section ul {
+            border-left: 0.3rem solid #71aeef;
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .example-code {
+            border-left: 0.3rem solid #71aeef;
+            padding-left: 10px;
+        }
+
+        .example-code h3 {
+            font-weight: 200;
+        }
+
+        td {
+            padding-right: 1rem;
+        }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div class="banner lead">
+    Drogue IoT OPC UA Agent
+</div>
+
+<div class="container">
+    <div class="left-column">
+        <p class="lead">Agent State Information</p>
+
+        <p>This pages shows the internal state of the OPC UA bridge.</p>
+
+        <div id="current-state">
+        </div>
+
+    </div>
+    <div class="right-column">
+        <div class="right-section">
+            <h3>State</h3>
+            <ul>
+                <li>Connection: <code id="connection-state"></code></li>
+            </ul>
+        </div>
+        <div class="right-section">
+            <h3>Do you like Drogue IoT?</h3>
+            <ul>
+                <li>Go give it a star on <a href="https://github.com/drogue-iot/drogue-cloud">GitHub</a>.</li>
+            </ul>
+        </div>
+        <div class="right-section">
+            <h3>More reading</h3>
+            <ul>
+                <li><a href="https://drogue.io" target="_blank">Drogue IoT</a></li>
+                <li><a href="https://sandbox.drogue.cloud" target="_blank">Public sandbox</a></li>
+                <li><a href="https://github.com/drogue-iot" target="_blank">GitHub organization</a></li>
+                <li><a href="https://matrix.to/#/#drogue-iot:matrix.org" target="_blank">Matrix chat channel</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    const device_events = new EventSource("/state");
+    device_events.onmessage = function (event) {
+        console.log("SEE: ", event);
+        const state = JSON.parse(event.data);
+        console.log("Event: ", state)
+
+        document.getElementById("connection-state").innerText = state.connection;
+
+        let table = $("<table><tr><th>Node ID</th><th>State</th><th>Value</th></th></tr></table>");
+        for (const item of state.items) {
+            console.log("Item: ", item);
+            let row = $("<tr></tr>");
+
+            let id = "ns=" + item.id.nodeId.namespaceIndex + ",";
+            switch (item.id.nodeId.type) {
+                case "String":
+                    id += "s=";
+                    break;
+                case "Numeric":
+                    id += "i=";
+                    break;
+                case "Guid":
+                    id += "g=";
+                    break;
+                case "Opaque":
+                    id += "b=";
+                    break;
+                default:
+                    id += item.id.nodeId.type + "=";
+            }
+            id += item.id.nodeId.identifier;
+            let col;
+            col = $("<code></code>").text(id);
+            col = $("<td></td>").append(col);
+            row.append(col);
+
+            col = $("<td></td>").text("0x" + item.value.statusCode.value.toString(16));
+            row.append(col);
+
+            col = $("<td></td>").text(item.value.value.value);
+            row.append(col);
+
+            table.append(row);
+        }
+        console.log(table);
+        $("#current-state").html(table);
+
+    };
+</script>
+
+</html>

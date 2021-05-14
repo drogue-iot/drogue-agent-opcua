@@ -1,0 +1,2 @@
+io.drogue.agent.opcua.config.IdentityProviderConverter
+io.drogue.agent.opcua.config.NodeIdConverter

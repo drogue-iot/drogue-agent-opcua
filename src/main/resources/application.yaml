@@ -1,0 +1,5 @@
+drogue:
+  cloud:
+    uplink:
+      "client/mp-rest/url": https://http.sandbox.drogue.cloud
+      "client/mp-rest/scope": javax.inject.Singleton

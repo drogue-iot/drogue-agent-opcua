@@ -18,7 +18,7 @@ public class Sender {
 
     @Incoming(STATE_CHANNEL)
     public void sendState(final State state) {
-        uplink.publish(state);
+        uplink.publishVertx(state);
     }
 
 }

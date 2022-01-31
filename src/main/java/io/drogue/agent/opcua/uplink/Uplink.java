@@ -45,7 +45,7 @@ public class Uplink {
         this.web.close();
     }
 
-    public void publishVertx(Object payload) {
+    public void publish(Object payload) {
         var url = String.format("%s/v1/%s", configuration.url, configuration.channel);
         LOG.info("Publishing using vertx: {}", url);
         web.postAbs(url)
@@ -56,7 +56,6 @@ public class Uplink {
                     } else {
                         LOG.info("Published", sent.cause());
                     }
-
                 });
     }
 

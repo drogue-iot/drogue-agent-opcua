@@ -211,7 +211,7 @@
                 <quarkus.package.type>native</quarkus.package.type>
                 <quarkus.native.enable-all-security-services>true</quarkus.native.enable-all-security-services>
                 <quarkus.native.additional-build-args>
-                    --trace-class-initialization=io.netty.buffer.PooledByteBufAllocator
+                    --trace-class-initialization=io.netty.buffer.PooledByteBufAllocator,--initialize-at-run-time=org.eclipse.milo.opcua.stack.core.util.BufferUtil\,org.eclipse.milo.opcua.stack.core.util.NonceUtil
                 </quarkus.native.additional-build-args>
             </properties>
         </profile>

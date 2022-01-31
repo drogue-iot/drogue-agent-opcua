@@ -1,5 +1,7 @@
 package io.drogue.agent.opcua.build;
 
+import com.oracle.svm.core.annotate.Alias;
+import com.oracle.svm.core.annotate.RecomputeFieldValue;
 import com.oracle.svm.core.annotate.Substitute;
 import com.oracle.svm.core.annotate.TargetClass;
 
@@ -14,7 +16,15 @@ import io.netty.buffer.Unpooled;
 @TargetClass(org.eclipse.milo.opcua.stack.core.util.BufferUtil.class)
 @Substitute
 // FIXME: still fails
-final class MiloSubstitutions {
+public final class Target_org_eclipse_milo_opcua_stack_core_util_BufferUtil {
+
+    @Alias
+    @RecomputeFieldValue(kind = RecomputeFieldValue.Kind.Reset)
+    private static final ByteBufAllocator allocator;
+
+    static {
+        allocator = null;
+    }
 
     @Substitute
     public static CompositeByteBuf compositeBuffer() {

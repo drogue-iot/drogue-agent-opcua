@@ -13,10 +13,10 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus-plugin.version>1.13.4.Final</quarkus-plugin.version>
-        <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
+        <quarkus-plugin.version>2.6.3.Final</quarkus-plugin.version>
+        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>1.13.4.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.6.3.Final</quarkus.platform.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <jandex-maven-plugin.version>1.0.8</jandex-maven-plugin.version>
     </properties>
@@ -87,7 +87,7 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-tcnative</artifactId>
             <classifier>linux-x86_64-fedora</classifier>
-            <version>2.0.39.Final</version>
+            <version>2.0.47.Final</version>
         </dependency>
 
         <!-- OPC UA -->
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>org.eclipse.milo</groupId>
             <artifactId>sdk-client</artifactId>
-            <version>0.6.1</version>
+            <version>0.6.3</version>
         </dependency>
 
         <!-- cloud stuff -->
@@ -120,7 +120,8 @@
         <dependency>
             <groupId>org.graalvm.nativeimage</groupId>
             <artifactId>svm</artifactId>
-            <version>20.1.0</version>
+            <version>21.2.0</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

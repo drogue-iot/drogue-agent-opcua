@@ -2,7 +2,7 @@ package io.drogue.agent.opcua;
 
 import static io.drogue.agent.opcua.Constants.STATE_CHANNEL;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -15,7 +15,7 @@ import org.eclipse.milo.opcua.stack.core.UaException;
 import io.drogue.agent.opcua.config.Configuration;
 import io.drogue.agent.opcua.state.State;
 import io.quarkus.runtime.Startup;
-import io.reactivex.Flowable;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.reactive.messaging.annotations.Broadcast;
 
 @ApplicationScoped
@@ -46,10 +46,11 @@ public class BridgeBean {
 
     @Outgoing(STATE_CHANNEL)
     @Broadcast
-    public Flowable<State> sendState() {
-        return Flowable.interval(10, TimeUnit.SECONDS)
-                .map(tick ->
-                        getState()
-                );
+    public Multi<State> sendState() {
+        return Multi.createBy()
+                .repeating()
+                .supplier(this::getState)
+                .withDelay(Duration.ofSeconds(10))
+                .indefinitely();
     }
 }
